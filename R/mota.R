@@ -1,5 +1,5 @@
 `mota` <-
-function(x,numOfBootSamp=35,sampleSize=floor(length(x[,1])/2),threshold1=0.01,threshold2=0.07,threshold3=0.08)
+function(x,numOfBootSamp=35,sampleSize=floor(length(x[,1])/2),threshold1=0.01,threshold2=0.07,threshold3=0.08,progress=FALSE)
 {
 
 ## Preliminaries -------------------------------------------------------
@@ -43,7 +43,8 @@ for(i in c(1:NOP))
 	{
 	rhs<-rhs+1
 	k<-0
-	for(j in c(1:numOfAvailable))
+    
+  for(j in c(1:numOfAvailable))
 		{
 		
 		k<-k+1
@@ -57,9 +58,11 @@ for(i in c(1:NOP))
 		newNumOfP<-length(xc[1,])
 		
 		## test functional relation
-		pp<-aceOfBootstrap(xc,numOfBootSamp,sampleSize)
-		Hc[k]<-var(pp$phi[,newNumOfP])
+		
+    pp<-aceOfBootstrap(xc,numOfBootSamp,sampleSize)
+   	Hc[k]<-var(pp$phi[,newNumOfP])
 		}
+		
 	## Set to zero those parameters which are not discussed at this very moment
 		
 		k<-1
@@ -76,7 +79,7 @@ for(i in c(1:NOP))
 	if(maxHc<threshold1 && H==0)
 		{
 		S[i,i]<-1
-		Hout[i]<-0
+		Hout[i]<-maxHc
 		break
 		}
 		
@@ -106,11 +109,12 @@ for(i in c(1:NOP))
 				if(NOP==2)
 				{
 				S[i,]<-1
-				Hout[i]<-Hbar
+				Hout[i]<-Hcc[1]
 				break
 				}
 										
 				HbarHist<-Hbar
+				HccHist<-Hcc[1]
 				availableHist<-available
 				H<-1;
 			}
@@ -121,7 +125,7 @@ for(i in c(1:NOP))
 				if(r==NOP-1)
 					{
 	   				S[i,i]<-1
-					Hout[i]<-Hbar
+					Hout[i]<-Hcc[1]
 					break
 					}
 			}
@@ -142,12 +146,13 @@ for(i in c(1:NOP))
 								{S[i,k]=1}
 						}
 						H<-0
-						Hout[i]<-Hbar
+						Hout[i]<-Hcc[1]
 						break
 						}
 					
 					## Keep in mind what you have just done
 					HbarHist<-Hbar
+					HccHist<-Hcc[1]
 					availableHist<-available
 					
 				}
@@ -161,11 +166,18 @@ for(i in c(1:NOP))
 						if(availableHist[k]==0)
 							{S[i,k]=1}
 					}
-					Hout[i]<-Hbar
+					Hout[i]<-HccHist
 					H<-0
 					break
 				}
 			}
+	
+		}
+			if(progress==TRUE)
+		  {
+		  mota.progress(i,NOP)
+		  }
+	
 		}
 # Output
 K<-NULL
@@ -173,7 +185,7 @@ attributes(K)<-list(class="mota",x=x,Hout=Hout,S=S)
 erg<-NULL
 erg<-K
 
-	}
+	
 
 }
 

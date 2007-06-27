@@ -5,10 +5,10 @@
 optimal transformations and a special test function designed to quantify the information contained in them. See [1] for
 further information about the test function.}
 \usage{
-mota(x, numOfBootSamp = 35, sampleSize = floor(length(x[,1])/2), threshold1 = 0.01, threshold2 = 0.07, threshold3 = 0.08)
+mota(x, numOfBootSamp = 35, sampleSize = floor(length(x[,1])/2), threshold1 = 0.01, threshold2 = 0.07, threshold3 = 0.08, progress = FALSE)
 }
 \arguments{
-  \item{x}{(N X P) matrix, with \code{N} replicates for \code{P} parameters (see details)}
+  \item{x}{\code{(N X P)} matrix, with \code{N} replicates for \code{P} parameters (see details)}
   \item{numOfBootSamp}{The number of bootstrap samples drawn from \code{x} to estimate the mean optimal transformation}
   \item{sampleSize}{ Size of the bootstrap samples }
   \item{threshold1}{ Lower threshold. The higher, the more conservative is the algorithm. \code{threshold1} determines
@@ -20,6 +20,7 @@ mota(x, numOfBootSamp = 35, sampleSize = floor(length(x[,1])/2), threshold1 = 0.
 				exceed \code{1/12}. \code{threshold2} determines the value of the mean test function above which
 				a functional relation is assigned to be strong.}
   \item{threshold3}{ Additional threshold to increase sensitivity.}
+  \item{progress}{ optional progress report in command line. Works only for Mac OS X and Windows GUIs.}
 }
 \details{
 The matrix \code{x} is the only input required. \code{mota} investigates \code{x} for functional relations among
@@ -44,7 +45,7 @@ between subgroups of parameters, \code{mota} may be superior especially for non-
 
 \value{
   An object of class \code{mota} with following attributes:
-  \item{S}{A \code{(P X P)} matrix with one indicating functional relations}
+  \item{S}{A \code{(P X P)} matrix with \code{1} indicating functional relations}
   \item{x }{The input matrix}
   \item{Hout}{Value of the testfunction for the functional relation found for each paramater}
   }
@@ -75,17 +76,7 @@ motaOut<-mota(x)
 #
 # investigate result
 summary(motaOut)
-#
-# plot aceplots of all parameter
-# related with the parameter three
-plot(motaOut,3)
-#
-# inspect deviances of x and include
-# information about explained variance
-get(getOption("device"))()
-plot(motaOut,"dev")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+
 \keyword{ methods }
 \keyword{ utilities }

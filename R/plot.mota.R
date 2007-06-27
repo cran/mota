@@ -50,7 +50,7 @@ function (x, ...)
     		par(mar=c(4,3.5,2,2),mgp=c(2,0.5,0))
 		plot(aceOut$y, aceOut$ty, xlab = paste("p", ix), ylab = expression(Theta),tck=0,cex.lab=1.2)
     		# nice ticks
-			tckLeng=0.03
+			tckLeng=0.02
 			axis(side=1,tck=tckLeng,labels=FALSE)
 			axis(side=2,tck=tckLeng,labels=FALSE)
 			axis(side=3,tck=tckLeng,labels=FALSE)
@@ -60,7 +60,7 @@ function (x, ...)
 			par(mar=c(4,3.5,2,2),mgp=c(2,0.5,0))
         		plot(x[, ixOfTrue[i]], tx[, i], xlab = paste("p", ixOfTrue[i]), ylab = expression(Phi),tck=0,cex.lab=1.2)
     			# nice ticks
-			tckLeng=0.03
+			tckLeng=0.02
 			axis(side=1,tck=tckLeng,labels=FALSE)
 			axis(side=2,tck=tckLeng,labels=FALSE)
 			axis(side=3,tck=tckLeng,labels=FALSE)
@@ -73,34 +73,35 @@ function (x, ...)
 	{
 		#################
 	  	## plot deviances
-	  	if(option=="dev")
+	  	if(option=="cv")
 		{
-		par(mfrow=c(2,1))
+		
 	
 		## centre data
 		xCentred<-x
 		for(i in 1:NOP)
 			{
-			xCentred[,i]<-xCentred[,i]-mean(xCentred[,i])
+			xCentred[,i]<-xCentred[,i]-median(xCentred[,i])
 			}
 
 		## boxplots
-		par(mar=c(4,4,2,2),mgp=c(2,0.5,0))
+		par(mar=c(5,5,3,3),mgp=c(3,1,0),ask=TRUE)
 		xCentred=data.frame(xCentred)
 		names(xCentred)=c(1:length(xCentred[1,]))
-		boxplot(xCentred,ylab="centred values",xlab="parameters")
-		
+		boxplot(xCentred,xlab="centred values",ylab="parameters",horizontal=TRUE,bty="n",cex.axis=1.1,cex.lab=1.1)
+		axis(side=1,labels=NA,tck=0.02)
+		axis(side=2,labels=NA,tck=0.02)		
 		## plot deviances in a semi-logarithmic plot
 		 Var <- var(x)
     		for (i in c(1:length(S[, 1])))
 			{
         		dev[i] = sqrt(Var[i, i])/mean(x[, i])
 			}
-		par(mar=c(4,4,1,2),mgp=c(2,0.5,0))
-		plot(1:NOP,dev,lab=c(NOP,5,7),xlab="parameters",ylab="log(deviances)",log="y",tck=0)
+		par(mar=c(5,5,3,3),mgp=c(3,1,0),ask=TRUE)
+		plot(1:NOP,dev,lab=c(NOP,5,7),xlab="parameters",ylab="log(deviances)",log="y",tck=0,cex=1.2,lwd=2,cex.axis=1.1,cex.lab=1.1)
 			
 			# nice ticks
-			tckLeng=0.03
+			tckLeng=0.02
 			axis(side=1,tck=tckLeng,labels=FALSE)
 			axis(side=2,tck=tckLeng,labels=FALSE)
 			axis(side=3,tck=tckLeng,labels=FALSE)
@@ -116,7 +117,7 @@ function (x, ...)
 			{
 			if(r2[i]>r2Threshold)
 				{
-				points(i,dev[i],col="green")
+				points(i,dev[i],col="green",cex=1.2,lwd=2)
 				}
 			}
 		
